@@ -1,18 +1,29 @@
+from random import randint, choice
+
+
 def display(name, color='white', lore='', is_italic=True):
     is_italic = str(is_italic).lower()
     return '"display":{"Name":\'{"text":"' + name + '", "color": "' \
         + color +'", "italic": "' + is_italic +'"}\', Lore:[\'"' + lore + '"\']}'
 
 
-def item(item_id, amount, attr_s=''):
-    return f'minecraft:{item_id}{attr_s} {amount}'
+def join_attr(*attr):
+    return '{' + ', '.join(attr) + '}'
 
 
-def give_command(target, item):
-    return f'/give {target} item'
+def chest(items):
+    rows = []
+    for slot, item_id, count, tag in items:
+        row = f'Slot:{slot},Count:{count},id:{item_id},tag:{tag}'
+        rows.append('{' + row + '}')
+    return 'chest{Items:[' + ','.join(rows) + ']}'
 
 
-print(display('frick', 'red', 'lore', False))
+COLORS = ['white', 'red', 'yellow', 'blue', 'green']
+ITEMS = ['iron_sword', 'beef', 'iron_shovel', 'grass']
 
-#attr = load_dict('buffer.json')
-#print(give_command('@p', 'netherite_sword', attr, 1))
+items = [
+    (i, choice(ITEMS), 1, join_attr(display('fuck', color=choice(COLORS), lore='f'))) for i in range(27)
+]
+
+print(chest(items))
